@@ -1,3 +1,12 @@
-RUN sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list && \
-    sed -i '/security.debian.org/s|security.debian.org|archive.debian.org/|g' /etc/apt/sources.list && \
-    apt-get update
+FROM python:3.10.8-slim-buster
+
+RUN apt update && apt upgrade -y
+RUN apt install git -y
+COPY requirements.txt /requirements.txt
+
+RUN cd /
+RUN pip3 install -U pip && pip3 install -U -r requirements.txt
+RUN mkdir /TechMachine-AutoFliterBot
+WORKDIR /TechMachine-AutoFliterBot
+COPY start.sh /start.sh
+CMD ["python3", "/start.sh"]
